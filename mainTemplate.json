@@ -28,7 +28,7 @@
     },
     "esVersion": {
       "type": "string",
-      "defaultValue": "7.17.3",
+      "defaultValue": "8.2.0",
       "allowedValues": [
         "6.8.14",
         "7.4.2",
@@ -39,7 +39,8 @@
         "7.9.3",
         "7.10.2",
         "7.11.1",
-        "7.17.3"
+        "7.17.3",
+        "8.2.0"
       ],
       "metadata": {
         "description": "Elastic Stack version to install"
@@ -743,7 +744,7 @@
     },
     "vmDataDiskSize": {
       "type": "string",
-      "defaultValue": "1TiB",
+      "defaultValue": "32GiB",
       "allowedValues": [
         "32GiB",
         "64GiB",

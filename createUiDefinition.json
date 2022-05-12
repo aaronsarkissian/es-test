@@ -54,7 +54,7 @@
             "name": "esVersion",
             "type": "Microsoft.Common.DropDown",
             "label": "Elasticsearch version",
-            "defaultValue": "v7.17.3",
+            "defaultValue": "v8.2.0",
             "toolTip": "Choose a version of Elasticsearch.",
             "constraints": {
               "allowedValues": [
@@ -97,6 +97,10 @@
                 {
                   "label": "v7.17.3",
                   "value": "7.17.3"
+                },
+                {
+                  "label": "v8.2.0",
+                  "value": "8.2.0"
                 }
               ]
             }
@@ -455,7 +459,7 @@
                 "type": "Microsoft.Common.DropDown",
                 "label": "Size of each managed disk",
                 "visible": "[greater(steps('nodesStep').dataNodesDisks.vmDataDiskCount, 0)]",
-                "defaultValue": "1TiB",
+                "defaultValue": "32GiB",
                 "toolTip": "The size of each data disk to attach to each data node",
                 "constraints": {
                   "allowedValues": [
