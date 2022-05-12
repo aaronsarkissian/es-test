@@ -211,7 +211,7 @@
         },
         {
           "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(variables('namespace'), '/script')]",
+          "name": "[concat(variables('namespace'), '/script2')]",
           "apiVersion": "2019-03-01",
           "location": "[parameters('location')]",
           "dependsOn": [
