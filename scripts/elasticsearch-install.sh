@@ -928,8 +928,9 @@ configure_elasticsearch_yaml()
         echo "node.data: true" >> $ES_CONF
     elif [ ${CLIENT_ONLY_NODE} -ne 0 ]; then
         log "[configure_elasticsearch_yaml] configure node as client only"
-        echo "node.master: false" >> $ES_CONF
-        echo "node.data: false" >> $ES_CONF
+        echo "# node.master: true" >> $ES_CONF
+        echo "# node.data: false" >> $ES_CONF
+        echo "node.roles: [ master, voting_only ]" >> $ES_CONF
     else
         log "[configure_elasticsearch_yaml] configure node as master and data"
         echo "node.master: true" >> $ES_CONF
