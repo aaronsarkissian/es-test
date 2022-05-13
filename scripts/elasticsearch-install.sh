@@ -110,7 +110,7 @@ BASIC_SECURITY=0
 INSTALL_ADDITIONAL_PLUGINS=""
 YAML_CONFIGURATION=""
 MANDATORY_PLUGINS=""
-VOTING_ONLY_NODE=0
+CLIENT_ONLY_NODE=0
 DATA_ONLY_NODE=0
 MASTER_ONLY_NODE=0
 
@@ -190,7 +190,7 @@ while getopts :n:m:v:A:R:M:K:S:F:Z:p:a:k:L:C:B:E:H:G:T:W:V:J:N:D:O:P:xyzldjh opt
       MASTER_ONLY_NODE=1
       ;;
     y) #client node
-      VOTING_ONLY_NODE=1
+      CLIENT_ONLY_NODE=1
       ;;
     z) #data node
       DATA_ONLY_NODE=1
@@ -310,7 +310,7 @@ format_data_disks()
     log "[format_data_disks] checking node role"
     if [ ${MASTER_ONLY_NODE} -eq 1 ]; then
         log "[format_data_disks] master node, no data disks attached"
-    elif [ ${VOTING_ONLY_NODE} -eq 1 ]; then
+    elif [ ${CLIENT_ONLY_NODE} -eq 1 ]; then
         log "[format_data_disks] client node, no data disks attached"
     else
         log "[format_data_disks] data node, data disks may be attached"
@@ -335,7 +335,7 @@ setup_data_disk()
         mkdir -p "$RAIDDISK/elasticsearch/data"
         chown -R elasticsearch:elasticsearch "$RAIDDISK/elasticsearch"
         chmod 755 "$RAIDDISK/elasticsearch"
-    elif [ ${MASTER_ONLY_NODE} -eq 0 -a ${VOTING_ONLY_NODE} -eq 0 ]; then
+    elif [ ${MASTER_ONLY_NODE} -eq 0 -a ${CLIENT_ONLY_NODE} -eq 0 ]; then
         local TEMPDISK="/mnt"
         log "[setup_data_disk] Configuring disk $TEMPDISK/elasticsearch/data"
         mkdir -p "$TEMPDISK/elasticsearch/data"
@@ -350,7 +350,7 @@ setup_data_disk()
 # Check Data Disk Folder and Permissions
 check_data_disk()
 {
-    if [ ${MASTER_ONLY_NODE} -eq 0 -a ${VOTING_ONLY_NODE} -eq 0 ]; then
+    if [ ${MASTER_ONLY_NODE} -eq 0 -a ${CLIENT_ONLY_NODE} -eq 0 ]; then
         log "[check_data_disk] data node checking data directory"
         if [ -d "/datadisks" ]; then
             log "[check_data_disk] data disks attached and mounted at /datadisks"
@@ -897,7 +897,7 @@ configure_elasticsearch_yaml()
     local DATAPATH_CONFIG=/var/lib/elasticsearch
     if [ -d /datadisks ]; then
         DATAPATH_CONFIG=/datadisks/disk1/elasticsearch/data
-    elif [ ${MASTER_ONLY_NODE} -eq 0 -a ${VOTING_ONLY_NODE} -eq 0 ]; then
+    elif [ ${MASTER_ONLY_NODE} -eq 0 -a ${CLIENT_ONLY_NODE} -eq 0 ]; then
         DATAPATH_CONFIG=/mnt/elasticsearch/data
     fi
 
@@ -923,13 +923,13 @@ configure_elasticsearch_yaml()
         echo "node.labels: [ master ]" >> $ES_CONF
     elif [ ${DATA_ONLY_NODE} -ne 0 ]; then
         log "[configure_elasticsearch_yaml] configure node as data only"
-        echo "node.labels: [ data, data_content, data_hot, data_warm, data_cold, data_frozen ]" >> $ES_CONF
-    elif [ ${VOTING_ONLY_NODE} -ne 0 ]; then
+        echo "node.labels: [ data, data_content, data_hot, data_warm, data_cold ]" >> $ES_CONF
+    elif [ ${CLIENT_ONLY_NODE} -ne 0 ]; then
         log "[configure_elasticsearch_yaml] configure node as client only"
         echo "node.labels: [ master, voting_only ]" >> $ES_CONF
     else
         log "[configure_elasticsearch_yaml] configure node as master and data"
-        echo "node.labels: [ master, data, data_content, data_hot, data_warm, data_cold, data_frozen, ingest, remote_cluster_client, transform ]" >> $ES_CONF
+        echo "node.labels: [ master, data, data_content, data_hot, data_warm, data_cold, ingest, remote_cluster_client, transform ]" >> $ES_CONF
     fi
     
     echo "network.host: [_site_, _local_]" >> $ES_CONF
