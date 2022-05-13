@@ -208,6 +208,16 @@
             "[resourceId('Microsoft.Compute/virtualMachines', parameters('namespace'))]"
           ],
           "properties": "[parameters('osSettings').extensionSettings.kibana]"
+        },
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(variables('namespace'), '/script2')]",
+          "apiVersion": "2019-03-01",
+          "location": "[parameters('location')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('namespace'))]"
+          ],
+          "properties": "[parameters('osSettings').extensionSettings.kibana2]"
         }
       ]
     }
