@@ -766,7 +766,7 @@ configure_http_tls()
               log "[configure_http_tls] generated HTTP cert for node"
           else
               log "[configure_http_tls] no certutil tool could be found to generate a HTTP cert"
-              exit 12
+              exit 13
           fi
         fi
     fi
@@ -821,7 +821,7 @@ configure_transport_tls()
           | openssl x509 -text -noout | grep "CA:TRUE"
         if [[ $? -ne 0 ]]; then
             log "[configure_transport_tls] Transport CA blob is not a Certificate Authority (CA)"
-            exit 12
+            exit 14
         fi
 
         # Generate certs with certutil
@@ -837,7 +837,7 @@ configure_transport_tls()
 
         else
             log "[configure_transport_tls] no certutil tool could be found to generate a Transport cert"
-            exit 12
+            exit 15
         fi
     fi
 
