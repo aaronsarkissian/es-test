@@ -253,7 +253,8 @@ configure_kibana_yaml()
 
     # set logging to quiet by default. Note that kibana does not have
     # a log file rotation policy, so the log file should be monitored
-    echo "logging.quiet: true" >> $KIBANA_CONF
+    # echo "logging.quiet: true" >> $KIBANA_CONF
+    echo "logging.root.level: error" >> $KIBANA_CONF
 
     # configure security
     local ENCRYPTION_KEY
@@ -282,6 +283,8 @@ configure_kibana_yaml()
       echo "xpack.reporting.encryptionKey: \"$ENCRYPTION_KEY\"" >> $KIBANA_CONF
       log "[configure_kibana_yaml] X-Pack Reporting encryption key generated"
     fi
+
+    echo "xpack.reporting.roles.enabled: false" >> $KIBANA_CONF
 
     # configure HTTPS if cert and private key supplied
     if [[ -n "${SSL_CERT}" && -n "${SSL_KEY}" ]]; then

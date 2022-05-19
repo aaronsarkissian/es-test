@@ -920,12 +920,14 @@ configure_elasticsearch_yaml()
     log "[configure_elasticsearch_yaml] configure master/client/data node type flags only master-$MASTER_ONLY_NODE only data-$DATA_ONLY_NODE"
     if [ ${MASTER_ONLY_NODE} -ne 0 ]; then
         log "[configure_elasticsearch_yaml] configure node as master only"
-        echo "node.master: true" >> $ES_CONF
-        echo "node.data: false" >> $ES_CONF
+        echo "# node.master: true" >> $ES_CONF
+        echo "# node.data: false" >> $ES_CONF
+        echo "node.roles: [ master ]" >> $ES_CONF
     elif [ ${DATA_ONLY_NODE} -ne 0 ]; then
         log "[configure_elasticsearch_yaml] configure node as data only"
-        echo "node.master: false" >> $ES_CONF
-        echo "node.data: true" >> $ES_CONF
+        echo "# node.master: false" >> $ES_CONF
+        echo "# node.data: true" >> $ES_CONF
+        echo "node.roles: [ data ]" >> $ES_CONF
     elif [ ${CLIENT_ONLY_NODE} -ne 0 ]; then
         log "[configure_elasticsearch_yaml] configure node as client only"
         echo "# node.master: true" >> $ES_CONF
@@ -933,12 +935,13 @@ configure_elasticsearch_yaml()
         echo "node.roles: [ master, voting_only ]" >> $ES_CONF
     else
         log "[configure_elasticsearch_yaml] configure node as master and data"
-        echo "node.master: true" >> $ES_CONF
-        echo "node.data: true" >> $ES_CONF
+        echo "# node.master: true" >> $ES_CONF
+        echo "# node.data: true" >> $ES_CONF
+        echo "node.roles: [data, data_content, data_hot, ingest, master, remote_cluster_client, transform]" >> $ES_CONF
     fi
     
     echo "network.host: [_site_, _local_]" >> $ES_CONF
-    echo "node.max_local_storage_nodes: 1" >> $ES_CONF
+    # echo "node.max_local_storage_nodes: 1" >> $ES_CONF
 
     configure_awareness_attributes $ES_CONF
 
